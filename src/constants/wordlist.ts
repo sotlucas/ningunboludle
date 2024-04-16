@@ -56,10 +56,10 @@ const DEFINITIONS: Definition[] = [
     word: 'pingo',
     definition: 'sinónimo de pene.',
   },
-  {
-    word: 'lacra',
-    definition: 'persona indeseable, criminal, sin escrúpulos.',
-  },
+  // {
+  //   word: 'lacra',
+  //   definition: 'persona indeseable, criminal, sin escrúpulos.',
+  // },
   {
     word: 'bondi',
     definition: 'sinónimo de colectivo, bus.',
