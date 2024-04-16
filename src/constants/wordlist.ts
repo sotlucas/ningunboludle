@@ -53,14 +53,6 @@ const DEFINITIONS: Definition[] = [
     definition: 'sinónimo de playo, bajo en profunidad. (De uso popular en Mendoza.)',
   },
   {
-    word: 'pingo',
-    definition: 'sinónimo de pene.',
-  },
-  // {
-  //   word: 'lacra',
-  //   definition: 'persona indeseable, criminal, sin escrúpulos.',
-  // },
-  {
     word: 'bondi',
     definition: 'sinónimo de colectivo, bus.',
   },
@@ -173,16 +165,20 @@ const DEFINITIONS: Definition[] = [
     definition: 'vesre de "calor".',
   },
   {
-    word: 'yerba',
-    definition: 'hojas desecadas, ligeramente tostadas usadas para elaborar el mate.',
-  },
-  {
     word: 'garra',
     definition: 'sinónimo de esfuerzo (en deportes).',
   },
   {
-    word: 'nashe',
-    definition: 'dícese de algo que está muy bueno; palabra popularizada por el youtuber Coscu.',
+    word: 'yerba',
+    definition: 'hojas desecadas, ligeramente tostadas usadas para elaborar el mate.',
+  },
+  {
+    word: 'pingo',
+    definition: 'sinónimo de pene.',
+  },
+  {
+    word: 'lacra',
+    definition: 'persona indeseable, criminal, sin escrúpulos.',
   },
   {
     word: 'rajar',
