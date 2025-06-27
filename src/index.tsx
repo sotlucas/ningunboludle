@@ -10,7 +10,6 @@ ReactDOM.render(
 
         <App />
       </AlertProvider>
-
   </React.StrictMode>,
   document.getElementById('root')
 )

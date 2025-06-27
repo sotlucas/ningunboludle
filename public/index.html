@@ -5,6 +5,18 @@
       name="description"
       content="Averiguá si sos un Boludle en el Wordle del mejor país"
     />
+
+    <!-- Handle redirect from 404.html -->
+    <script>
+      (function() {
+        const params = new URLSearchParams(window.location.search);
+        const redirectPath = params.get("redirect");
+        if (redirectPath) {
+          history.replaceState(null, "", redirectPath);
+        }
+      })();
+    </script>
+
     <script
       async
       src="https://www.googletagmanager.com/gtag/js?id=G-DW4L6XK6P0"
