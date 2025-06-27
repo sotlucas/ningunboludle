@@ -1,5 +1,3 @@
-export const GAME_TITLE = process.env.REACT_APP_GAME_NAME!
-
 export const WIN_MESSAGES = [
   'no sos ningún boludle!',
   "Gardel so' vo'? bien ahí, boludle!",

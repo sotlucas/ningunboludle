@@ -1,5 +1,4 @@
 import { ChartBarIcon, InformationCircleIcon } from '@heroicons/react/outline'
-import { GAME_TITLE } from '../../constants/strings'
 import ImgMate from '../../assets/mate.png'
 
 type Props = {
@@ -25,15 +24,8 @@ export const Navbar = ({ setIsInfoModalOpen, setIsStatsModalOpen }: Props) => {
           onClick={() => setIsInfoModalOpen(true)}
         />
 
-        {/* <div className="flex w-80 mx-auto items-center mb-5 mt-8">
-        <h1 className="text-xl ml-2.5 font-bold dark:text-white">boludle</h1>
-        <img
-          className="h-6 w-6 ml-1 mr-2 cursor-pointer dark:stroke-white"
-          src={ImgMate}
-          alt=""
-        /> */}
         <div className="flex">
-          <p className="text-xl font-bold dark:text-white">{GAME_TITLE}</p>
+          <p className="text-xl font-bold dark:text-white">boludle</p>
           <img
             className="h-6 w-6 ml-1 cursor-pointer dark:stroke-white"
             src={ImgMate}
