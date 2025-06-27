@@ -1,14 +1,18 @@
-import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Boludle from './Boludle'
-import { AlertProvider } from './context/AlertContext'
-
+import BuildInfo from './components/dev/BuildInfo'
 
 function App() {
 
   return (
-    <AlertProvider>
-        <Boludle />
-    </AlertProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/build/info" element={<BuildInfo />} />
+        <Route path="/" element={<Boludle />} />
+        <Route path="*" element={<Boludle />} />
+      </Routes>
+    </BrowserRouter>
+
   )
 }
 
