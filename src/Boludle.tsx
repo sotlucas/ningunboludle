@@ -32,7 +32,7 @@ import {
 import { default as GraphemeSplitter } from 'grapheme-splitter'
 
 import { AlertContainer } from './components/alerts/AlertContainer'
-import { AlertProvider, useAlert } from './context/AlertContext'
+import { useAlert } from './context/AlertContext'
 import { Navbar } from './components/navbar/Navbar'
 
 function Boludle() {
