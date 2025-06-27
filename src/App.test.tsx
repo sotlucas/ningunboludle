@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import App from './App'
+import Boludle from './App'
 
 beforeEach(() => {
   Object.defineProperty(window, 'matchMedia', {
@@ -19,7 +19,7 @@ beforeEach(() => {
 })
 
 test('renders App component', () => {
-  render(<App />)
+  render(<Boludle />)
   const linkElement = screen.getByText('boludle')
   expect(linkElement).toBeInTheDocument()
 })

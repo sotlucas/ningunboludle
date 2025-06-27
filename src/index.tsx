@@ -1,15 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import App from './App'
 import reportWebVitals from './reportWebVitals'
-import { AlertProvider } from './context/AlertContext'
+import App from './App'
 
 ReactDOM.render(
   <React.StrictMode>
-    <AlertProvider>
       <App />
-    </AlertProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )
