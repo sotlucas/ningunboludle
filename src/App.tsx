@@ -5,7 +5,7 @@ import BuildInfo from './components/dev/BuildInfo'
 function App() {
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/">
       <Routes>
         <Route path="/build/info" element={<BuildInfo />} />
         <Route path="/" element={<Boludle />} />
