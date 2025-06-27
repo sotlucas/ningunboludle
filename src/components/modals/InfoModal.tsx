@@ -47,28 +47,6 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
       <p className="text-sm text-gray-500 dark:text-gray-300">
         la palabra no contiene la letra I.
       </p>
-
-      <p className="mt-6 text-sm text-gray-500 dark:text-gray-300">
-        en boludle, la palabra del día es una relacionada con Argentina. puede
-        ser del lunfardo, de uso popular en distintas generaciones y lugares del
-        país, e incluso ser una cosa o figura icónica!
-      </p>
-      <p className="mt-6 italic text-sm text-gray-500 dark:text-gray-300">
-        este es un juego argentino basado en el código open-source de Wordle -{' '}
-        <a
-          href="https://github.com/sjaquemate/boludle"
-          className="underline font-bold"
-        >
-          mira el código argentino acá
-        </a>{' '}
-        -{' '}
-        <a
-          href="https://github.com/cwackerfuss/react-wordle"
-          className="underline font-bold"
-        >
-          y el código original acá
-        </a>{' '}
-      </p>
     </BaseModal>
   )
 }
