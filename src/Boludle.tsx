@@ -171,7 +171,6 @@ function Boludle() {
   }
 
   return (
-    <AlertProvider>
       <div className="h-screen flex flex-col">
         <Navbar
           setIsInfoModalOpen={setIsInfoModalOpen}
@@ -213,7 +212,6 @@ function Boludle() {
           <AlertContainer />
         </div>
       </div>
-    </AlertProvider>
   )
 }
 
