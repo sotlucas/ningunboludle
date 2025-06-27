@@ -16,7 +16,7 @@ export const Navbar = ({ setIsInfoModalOpen, setIsStatsModalOpen }: Props) => {
           Jugá a nuestro nuevo juego:{' '}
           <a className="underline font-bold" href="https://www.conexionesargentinas.com.ar">
             ConexionesArgentinas
-          </a>!
+          </a>
         </p>
       </div>
       <div className="navbar-content px-5">
