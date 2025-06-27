@@ -31,10 +31,7 @@
     "fix": "prettier --write src",
     "lint": "prettier --check src",
     "start": "react-scripts start",
-    "test": "react-scripts test",
-    "prepare": "husky install",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
