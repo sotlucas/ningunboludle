@@ -50,7 +50,8 @@ const DEFINITIONS: Definition[] = [
   },
   {
     word: 'pando',
-    definition: 'sinónimo de playo, bajo en profunidad. (De uso popular en Mendoza.)',
+    definition:
+      'sinónimo de playo, bajo en profunidad. (De uso popular en Mendoza.)',
   },
   {
     word: 'bondi',
@@ -94,7 +95,8 @@ const DEFINITIONS: Definition[] = [
   },
   {
     word: 'facha',
-    definition: 'se usa para referirse a alguien bien arreglado, con buen aspecto.',
+    definition:
+      'se usa para referirse a alguien bien arreglado, con buen aspecto.',
   },
   {
     word: 'skere',
@@ -170,7 +172,8 @@ const DEFINITIONS: Definition[] = [
   },
   {
     word: 'yerba',
-    definition: 'hojas desecadas, ligeramente tostadas usadas para elaborar el mate.',
+    definition:
+      'hojas desecadas, ligeramente tostadas usadas para elaborar el mate.',
   },
   {
     word: 'pingo',
@@ -203,7 +206,87 @@ const DEFINITIONS: Definition[] = [
   {
     word: 'curro',
     definition: 'sinónimo de estafa, o trabajo fácil para ganar dinero.',
-  }
+  },
+  // Palabras argentinas de 5 letras
+  {
+    word: 'tango',
+    definition: 'género musical y baile originario del Río de la Plata.',
+  },
+  {
+    word: 'messi',
+    definition:
+      'el mejor futbolista de todos los tiempos, originario de Rosario, Argentina.',
+  },
+  {
+    word: 'croto',
+    definition: 'persona que viste de forma descuidada o sucia.',
+  },
+  {
+    word: 'chivo',
+    definition: 'olor a transpiración muy fuerte',
+  },
+  {
+    word: 'pampa',
+    definition: 'llanura extensa y fértil, típica de Argentina.',
+  },
+  {
+    word: 'chaco',
+    definition: 'provincia del norte argentino, conocida por su biodiversidad.',
+  },
+  {
+    word: 'termo',
+    definition:
+      'recipiente aislante que mantiene la temperatura de líquidos, muy usado para el mate.',
+  },
+  {
+    word: 'yirar',
+    definition: 'deambular sin rumbo fijo, especialmente por las calles.',
+  },
+  {
+    word: 'siome',
+    definition: 'persona tonta o poco inteligente.',
+  },
+  {
+    word: 'garca',
+    definition: 'persona que actúa de manera deshonesta o traicionera.',
+  },
+  {
+    word: 'posta',
+    definition: 'verdad; se usa para confirmar algo (“es la posta”).',
+  },
+  {
+    word: 'trola',
+    definition: 'término despectivo para referirse a una mujer promiscua.',
+  },
+  {
+    word: 'zurdo',
+    definition: 'persona con inclinaciones políticas de izquierda.',
+  },
+  {
+    word: 'chupi',
+    definition: 'bebida alcohólica, especialmente cerveza o vino.',
+  },
+  {
+    word: 'nashe',
+    definition:
+      'expresión que denota algo bueno o agradable, similar a "cool".',
+  },
+  {
+    word: 'biaba',
+    definition: 'acción de golpear o dar un golpe fuerte.',
+  },
+  {
+    word: 'bocho',
+    definition: 'persona inteligente o astuta.',
+  },
+  {
+    word: 'chata',
+    definition: 'camioneta tipo pickup.',
+  },
+  {
+    word: 'timba',
+    definition: 'juego de azar, especialmente relacionado con apuestas.',
+  },
 ]
 
 let WORDS: string[] = []
