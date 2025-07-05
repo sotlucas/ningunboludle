@@ -13,9 +13,13 @@ export const Navbar = ({ setIsInfoModalOpen, setIsStatsModalOpen }: Props) => {
       <div className="navbar-banner px-5 py-2 bg-amber-200">
         <p className="text-sm italic mx-5 text-center">
           Jugá a nuestro nuevo juego:{' '}
-          <a className="underline font-bold" href="https://www.conexionesargentinas.com.ar">
+          <a
+            className="underline font-bold"
+            href="https://boluxiones.sotlucas.dev"
+          >
             ConexionesArgentinas
-          </a>!
+          </a>
+          !
         </p>
       </div>
       <div className="navbar-content px-5">
