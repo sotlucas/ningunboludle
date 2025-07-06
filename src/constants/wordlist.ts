@@ -99,6 +99,11 @@ const DEFINITIONS: Definition[] = [
       'se usa para referirse a alguien bien arreglado, con buen aspecto.',
   },
   {
+    word: 'facho',
+    definition:
+      'deformación de fascista. Aquel que realiza acciones o emite opiniones relacionadas con la extrema derecha.',
+  },
+  {
     word: 'skere',
     definition: 'dícese de algo que va a estar bueno, de "lets get it"',
   },
@@ -207,7 +212,6 @@ const DEFINITIONS: Definition[] = [
     word: 'curro',
     definition: 'sinónimo de estafa, o trabajo fácil para ganar dinero.',
   },
-  // Palabras argentinas de 5 letras
   {
     word: 'tango',
     definition: 'género musical y baile originario del Río de la Plata.',
@@ -286,6 +290,60 @@ const DEFINITIONS: Definition[] = [
   {
     word: 'timba',
     definition: 'juego de azar, especialmente relacionado con apuestas.',
+  },
+  {
+    word: 'diego',
+    definition: 'Diego Armando Maradona, ícono del fútbol argentino y mundial.',
+  },
+  {
+    word: 'fiaca',
+    definition: 'pereza o falta de ganas de hacer algo.',
+  },
+  {
+    word: 'junar',
+    definition:
+      'sinónimo de conocer, reconocer, prestar atención a una persona.',
+  },
+  {
+    word: 'clave',
+    definition: 'se usa para decir que algo esta bueno o es muy necesario.',
+  },
+  {
+    word: 'langa',
+    definition: 'creerse mejor que otros, "agrandarse".',
+  },
+  {
+    word: 'birra',
+    definition: 'cerveza.',
+  },
+  {
+    word: 'tongo',
+    definition: 'engaño o fraude, especialmente en juegos o apuestas.',
+  },
+  {
+    word: 'bendi',
+    definition: 'bendición, usado para referirse al hijo de alguien.',
+  },
+  {
+    word: 'cheto',
+    definition: 'persona de clase alta, con aires de superioridad.',
+  },
+  {
+    word: 'agite',
+    definition: 'acción de alborotar o hacer ruido, especialmente en fiestas.',
+  },
+  {
+    word: 'grasa',
+    definition: 'persona vulgar o de mal gusto.',
+  },
+  {
+    word: 'faina',
+    definition:
+      'masa horneada, hecha con harina de garbanzos, que se come acompañando una pizza.',
+  },
+  {
+    word: 'bagre',
+    definition: 'persona muy fea.',
   },
 ]
 
