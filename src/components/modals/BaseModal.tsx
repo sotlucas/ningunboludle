@@ -1,73 +1,65 @@
-import { Fragment } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { XCircleIcon } from '@heroicons/react/outline'
+import type { ReactNode } from 'react'
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
+import { AnimatePresence, motion } from 'motion/react'
+import { X } from 'lucide-react'
 
 type Props = {
   title: string
-  children: React.ReactNode
+  children: ReactNode
   isOpen: boolean
   handleClose: () => void
 }
 
 export const BaseModal = ({ title, children, isOpen, handleClose }: Props) => {
   return (
-    <Transition.Root show={isOpen} as={Fragment}>
-      <Dialog
-        as="div"
-        className="fixed z-10 inset-0 overflow-y-auto"
-        onClose={handleClose}
-      >
-        <div className="flex items-center justify-center min-h-screen py-10 px-4 text-center sm:block sm:p-0">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          </Transition.Child>
-
-          {/* This element is to trick the browser into centering the modal contents. */}
-          <span
-            className="hidden sm:inline-block sm:align-middle sm:h-screen"
+    <AnimatePresence>
+      {isOpen && (
+        <Dialog
+          static
+          open={isOpen}
+          onClose={handleClose}
+          className="fixed inset-0 z-50"
+        >
+          <motion.div
+            className="fixed inset-0 bg-[#0d1420]/60 backdrop-blur-sm"
             aria-hidden="true"
-          >
-            &#8203;
-          </span>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            enterTo="opacity-100 translate-y-0 sm:scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-            leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          >
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6 dark:bg-gray-800">
-              <div className="absolute right-4 top-4">
-                <XCircleIcon
-                  className="h-6 w-6 cursor-pointer dark:stroke-white"
-                  onClick={() => handleClose()}
-                />
-              </div>
-              <div>
-                <div className="text-center">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
-                  >
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          />
+          <div className="fixed inset-0 flex items-end justify-center sm:items-center">
+            <DialogPanel className="contents">
+              <motion.div
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: '100%', opacity: 0 }}
+                transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+                className="relative w-full max-w-sm max-h-[88dvh] overflow-y-auto rounded-t-3xl sm:rounded-3xl bg-surface-raised border border-border shadow-[0_8px_28px_rgba(13,20,32,0.25)] px-6 pb-8 pt-3 sm:pt-6"
+              >
+                <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-border sm:hidden" />
+                <div className="h-1 -mx-6 -mt-3 mb-5 hidden rounded-t-3xl bg-accent sm:block" />
+
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="absolute right-4 top-5 text-ink-muted transition-colors hover:text-ink"
+                  aria-label="cerrar"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+
+                {title && (
+                  <DialogTitle className="text-center font-display text-xl font-bold text-ink">
                     {title}
-                  </Dialog.Title>
-                  <div className="mt-2">{children}</div>
-                </div>
-              </div>
-            </div>
-          </Transition.Child>
-        </div>
-      </Dialog>
-    </Transition.Root>
+                  </DialogTitle>
+                )}
+                <div className="mt-3 text-sm text-ink-soft">{children}</div>
+              </motion.div>
+            </DialogPanel>
+          </div>
+        </Dialog>
+      )}
+    </AnimatePresence>
   )
 }

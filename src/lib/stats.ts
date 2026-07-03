@@ -1,6 +1,6 @@
 import { MAX_CHALLENGES } from '../constants/settings'
+import type { GameStats } from './localStorage'
 import {
-  GameStats,
   loadStatsFromLocalStorage,
   saveStatsToLocalStorage,
 } from './localStorage'

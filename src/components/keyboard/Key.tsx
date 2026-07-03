@@ -1,8 +1,8 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import classnames from 'classnames'
-import { CharStatus } from '../../lib/statuses'
+import { motion } from 'motion/react'
+import type { CharStatus } from '../../lib/statuses'
 import { MAX_WORD_LENGTH, REVEAL_TIME_MS } from '../../constants/settings'
-import { getStoredIsHighContrastMode } from '../../lib/localStorage'
 
 type Props = {
   children?: ReactNode
@@ -11,6 +11,12 @@ type Props = {
   status?: CharStatus
   onClick: (value: string) => void
   isRevealing?: boolean
+}
+
+const STATUS_CLASSES: Record<CharStatus, string> = {
+  correct: 'bg-correct text-white',
+  present: 'bg-present text-white',
+  absent: 'bg-absent text-white',
 }
 
 export const Key = ({
@@ -22,30 +28,22 @@ export const Key = ({
   isRevealing,
 }: Props) => {
   const keyDelayMs = REVEAL_TIME_MS * MAX_WORD_LENGTH
-  const isHighContrast = getStoredIsHighContrastMode()
 
   const classes = classnames(
-    'flex items-center justify-center rounded mx-0.5 text-xs font-bold cursor-pointer select-none dark:text-white',
+    'flex items-center justify-center rounded-lg mx-0.5 text-sm font-sans font-semibold cursor-pointer select-none shadow-sm',
     {
-      'transition ease-in-out': isRevealing,
-      'bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 active:bg-slate-400':
+      transition: isRevealing,
+      'bg-surface-raised text-ink hover:bg-accent-dim active:bg-accent-dim':
         !status,
-      'bg-slate-400 dark:bg-slate-800 text-white': status === 'absent',
-      'bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white':
-        status === 'correct' && isHighContrast,
-      'bg-cyan-500 hover:bg-cyan-600 active:bg-cyan-700 text-white':
-        status === 'present' && isHighContrast,
-      'bg-green-500 hover:bg-green-600 active:bg-green-700 text-white':
-        status === 'correct' && !isHighContrast,
-      'bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white':
-        status === 'present' && !isHighContrast,
-    }
+      [value === 'Ñ' ? 'ring-2 ring-accent' : '']: value === 'Ñ' && !status,
+    },
+    status ? STATUS_CLASSES[status] : undefined
   )
 
   const styles = {
     transitionDelay: isRevealing ? `${keyDelayMs}ms` : 'unset',
     width: `${width}px`,
-    height: '58px',
+    height: '54px',
   }
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -54,8 +52,13 @@ export const Key = ({
   }
 
   return (
-    <button style={styles} className={classes} onClick={handleClick}>
+    <motion.button
+      style={styles}
+      className={classes}
+      onClick={handleClick}
+      whileTap={{ scale: 0.9 }}
+    >
       {children || value}
-    </button>
+    </motion.button>
   )
 }

@@ -349,7 +349,7 @@ const DEFINITIONS: Definition[] = [
 
 let WORDS: string[] = []
 
-DEFINITIONS.forEach(function (item, index) {
+DEFINITIONS.forEach(function (item) {
   WORDS.push(item.word)
 })
 

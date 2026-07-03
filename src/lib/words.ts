@@ -2,7 +2,6 @@ import { WORDS, DEFINITIONS } from '../constants/wordlist'
 import { VALID_GUESSES } from '../constants/validGuesses'
 import { WRONG_SPOT_MESSAGE, NOT_CONTAINED_MESSAGE } from '../constants/strings'
 import { getGuessStatuses } from './statuses'
-import { default as GraphemeSplitter } from 'grapheme-splitter'
 
 export const isWordInWordList = (word: string) => {
   return (
@@ -54,8 +53,10 @@ export const findFirstUnusedReveal = (word: string, guesses: string[]) => {
   return false
 }
 
+const segmenter = new Intl.Segmenter('es', { granularity: 'grapheme' })
+
 export const unicodeSplit = (word: string) => {
-  return new GraphemeSplitter().splitGraphemes(word)
+  return Array.from(segmenter.segment(word), (s) => s.segment)
 }
 
 export const unicodeLength = (word: string) => {
@@ -63,14 +64,14 @@ export const unicodeLength = (word: string) => {
 }
 
 export const localeAwareLowerCase = (text: string) => {
-  return process.env.REACT_APP_LOCALE_STRING
-    ? text.toLocaleLowerCase(process.env.REACT_APP_LOCALE_STRING)
+  return import.meta.env.VITE_LOCALE_STRING
+    ? text.toLocaleLowerCase(import.meta.env.VITE_LOCALE_STRING)
     : text.toLowerCase()
 }
 
 export const localeAwareUpperCase = (text: string) => {
-  return process.env.REACT_APP_LOCALE_STRING
-    ? text.toLocaleUpperCase(process.env.REACT_APP_LOCALE_STRING)
+  return import.meta.env.VITE_LOCALE_STRING
+    ? text.toLocaleUpperCase(import.meta.env.VITE_LOCALE_STRING)
     : text.toUpperCase()
 }
 

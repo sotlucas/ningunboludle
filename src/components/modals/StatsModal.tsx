@@ -1,16 +1,11 @@
-import Countdown from 'react-countdown'
 import { StatBar } from '../stats/StatBar'
 import { Histogram } from '../stats/Histogram'
-import { GameStats } from '../../lib/localStorage'
-import { shareStatus } from '../../lib/share'
-import { solution, definition, tomorrow } from '../../lib/words'
+import type { GameStats } from '../../lib/localStorage'
 import { BaseModal } from './BaseModal'
-import {
-  STATISTICS_TITLE,
-  GUESS_DISTRIBUTION_TEXT,
-  NEW_WORD_TEXT,
-  SHARE_TEXT,
-} from '../../constants/strings'
+import { DefinitionReveal } from './DefinitionReveal'
+import { CountdownToNextWord } from './CountdownToNextWord'
+import { ShareButton } from './ShareButton'
+import { STATISTICS_TITLE, GUESS_DISTRIBUTION_TEXT } from '../../constants/strings'
 
 type Props = {
   isOpen: boolean
@@ -20,9 +15,6 @@ type Props = {
   isGameLost: boolean
   isGameWon: boolean
   handleShareToClipboard: () => void
-  isHardMode: boolean
-  isDarkMode: boolean
-  isHighContrastMode: boolean
 }
 
 export const StatsModal = ({
@@ -33,104 +25,68 @@ export const StatsModal = ({
   isGameLost,
   isGameWon,
   handleShareToClipboard,
-  isHardMode,
-  isDarkMode,
-  isHighContrastMode,
 }: Props) => {
-  if (gameStats.totalGames <= 0) {
-    return (
-      <BaseModal
-        title={STATISTICS_TITLE}
-        isOpen={isOpen}
-        handleClose={handleClose}
-      >
-        <StatBar gameStats={gameStats} />
-      </BaseModal>
-    )
-  }
-  return (
-    <BaseModal title="" isOpen={isOpen} handleClose={handleClose}>
-      {(isGameLost || isGameWon) && (
-        <div>
-          <h4 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">
-            definición
-          </h4>
-          <div>
-            <h5>
-              <strong>{solution}</strong> — {definition.definition} <br />{' '}
-            </h5>
-            {/*             {isGameWon && (
-              <div className="mt-0">
-                {' '}
-                <img src={GIF_URL(solution)} alt="" />{' '}
-              </div>
-            )}
-            {isGameLost && (
-              <div className="mt-5">
-                {' '}
-                <img src={GIF_URL('boludle')} alt="" />{' '}
-              </div>
-            )} */}
-          </div>
-        </div>
-      )}
+  const isGameOver = isGameLost || isGameWon
 
-      {(isGameLost || isGameWon) && (
-        <div className="mt-5 sm:mt-5 columns-2">
+  return (
+    <BaseModal
+      title={isGameOver ? '' : STATISTICS_TITLE}
+      isOpen={isOpen}
+      handleClose={handleClose}
+    >
+      <div className="flex flex-col gap-5">
+        {isGameOver && (
+          <>
+            <DefinitionReveal />
+            <div className="flex items-center justify-between gap-3">
+              <CountdownToNextWord />
+            </div>
+            <ShareButton
+              guesses={guesses}
+              isGameLost={isGameLost}
+              onShared={handleShareToClipboard}
+            />
+          </>
+        )}
+
+        <div>
+          {isGameOver && (
+            <h4 className="mb-2 text-center font-display text-lg font-bold text-ink">
+              {STATISTICS_TITLE}
+            </h4>
+          )}
+          <StatBar gameStats={gameStats} />
+        </div>
+
+        {gameStats.totalGames > 0 && (
           <div>
-            <h5>{NEW_WORD_TEXT}</h5>
-            <Countdown
-              className="text-lg font-medium text-gray-900 dark:text-gray-100"
-              date={tomorrow}
-              daysInHours={true}
+            <h4 className="mb-2 text-center text-xs font-semibold uppercase tracking-wide text-ink-muted">
+              {GUESS_DISTRIBUTION_TEXT}
+            </h4>
+            <Histogram
+              gameStats={gameStats}
+              lastGuessCount={isGameWon ? guesses.length : undefined}
             />
           </div>
+        )}
 
-          {/* <a
-        href="https://twitter.com/intent/tweet?text=Hello my stupid tweet%0and this is crazy">
-        <TwitterIcon size={32} round />
-        </a> */}
-
-          <button
-            type="button"
-            className="mt-2 w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
-            onClick={() => {
-              shareStatus(
-                guesses,
-                isGameLost,
-                isHardMode,
-                isDarkMode,
-                isHighContrastMode,
-                handleShareToClipboard
-              )
-            }}
+        <div className="text-center text-xs text-ink-muted">
+          mandanos sugerencias via{' '}
+          <a
+            href="https://twitter.com/boludle"
+            className="font-medium text-accent underline"
           >
-            {SHARE_TEXT}
-          </button>
+            Twitter
+          </a>{' '}
+          o via{' '}
+          <a
+            href="mailto:info@boludle.com"
+            className="font-medium text-accent underline"
+          >
+            mail
+          </a>
         </div>
-      )}
-
-      <div className="mt-5">
-        mandanos sugerencias via{' '}
-        <a href="https://twitter.com/boludle" className="underline font-bold">
-          Twitter
-        </a>{' '}
-        o via{' '}
-        <a href="mailto:info@boludle.com" className="underline font-bold">
-          Mail
-        </a>{' '}
       </div>
-
-      <h4 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">
-        <br />
-        {STATISTICS_TITLE}
-      </h4>
-
-      <StatBar gameStats={gameStats} />
-      <h4 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">
-        {GUESS_DISTRIBUTION_TEXT}
-      </h4>
-      <Histogram gameStats={gameStats} />
     </BaseModal>
   )
 }

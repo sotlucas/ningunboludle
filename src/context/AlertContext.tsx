@@ -1,10 +1,10 @@
 import {
   createContext,
-  ReactNode,
   useCallback,
   useContext,
   useState,
 } from 'react'
+import type { ReactNode } from 'react'
 import { ALERT_TIME_MS } from '../constants/settings'
 
 type AlertStatus = 'success' | 'error' | undefined

@@ -1,7 +1,7 @@
-import { CharStatus } from '../../lib/statuses'
 import classnames from 'classnames'
+import { motion } from 'motion/react'
+import type { CharStatus } from '../../lib/statuses'
 import { REVEAL_TIME_MS } from '../../constants/settings'
-import { getStoredIsHighContrastMode } from '../../lib/localStorage'
 
 type Props = {
   value?: string
@@ -9,6 +9,12 @@ type Props = {
   isRevealing?: boolean
   isCompleted?: boolean
   position?: number
+}
+
+const STATUS_CLASSES: Record<CharStatus, string> = {
+  correct: 'bg-correct border-correct text-white',
+  present: 'bg-present border-present text-white',
+  absent: 'bg-absent border-absent text-white',
 }
 
 export const Cell = ({
@@ -20,35 +26,45 @@ export const Cell = ({
 }: Props) => {
   const isFilled = value && !isCompleted
   const shouldReveal = isRevealing && isCompleted
-  const animationDelay = `${position * REVEAL_TIME_MS}ms`
-  const isHighContrast = getStoredIsHighContrastMode()
+  const delayMs = position * REVEAL_TIME_MS
+  const flipDurationS = (REVEAL_TIME_MS * 1.4) / 1000
 
   const classes = classnames(
-    'w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-4xl font-bold rounded dark:text-white',
-    {
-      'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-600':
-        !status,
-      'border-black dark:border-slate-100': value && !status,
-      'absent shadowed bg-slate-400 dark:bg-slate-700 text-white border-slate-400 dark:border-slate-700':
-        status === 'absent',
-      'correct shadowed bg-orange-500 text-white border-orange-500':
-        status === 'correct' && isHighContrast,
-      'present shadowed bg-cyan-500 text-white border-cyan-500':
-        status === 'present' && isHighContrast,
-      'correct shadowed bg-green-500 text-white border-green-500':
-        status === 'correct' && !isHighContrast,
-      'present shadowed bg-yellow-500 text-white border-yellow-500':
-        status === 'present' && !isHighContrast,
-      'cell-fill-animation': isFilled,
-      'cell-reveal': shouldReveal,
-    }
+    'w-14 h-14 border-2 flex items-center justify-center mx-0.5 text-3xl font-sans font-bold rounded-lg transition-colors',
+    status
+      ? STATUS_CLASSES[status]
+      : 'bg-surface-raised border-border text-ink',
+    { 'border-accent': isFilled }
   )
 
   return (
-    <div className={classes} style={{ animationDelay }}>
-      <div className="letter-container" style={{ animationDelay }}>
-        {value}
-      </div>
-    </div>
+    <motion.div
+      className={classes}
+      style={{
+        transitionDelay: shouldReveal
+          ? `${delayMs + flipDurationS * 500}ms`
+          : '0ms',
+      }}
+      initial={false}
+      animate={
+        shouldReveal
+          ? { rotateX: [0, 90, 0] }
+          : isFilled
+            ? { scale: [0.85, 1] }
+            : undefined
+      }
+      transition={
+        shouldReveal
+          ? {
+              duration: flipDurationS,
+              times: [0, 0.5, 1],
+              delay: delayMs / 1000,
+              ease: 'easeIn',
+            }
+          : { duration: 0.1 }
+      }
+    >
+      {value}
+    </motion.div>
   )
 }

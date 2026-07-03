@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" translate="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="description"
+      content="Averiguá si sos un Boludle en el Wordle del mejor país"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#75AADB" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- Handle redirect from 404.html (GitHub Pages SPA routing trick) -->
+    <script>
+      (function () {
+        const params = new URLSearchParams(window.location.search)
+        const redirectPath = params.get('redirect')
+        if (redirectPath) {
+          history.replaceState(null, '', redirectPath)
+        }
+      })()
+    </script>
+
+    <!-- Apply the saved/system theme before first paint to avoid a flash -->
+    <script>
+      ;(function () {
+        const stored = localStorage.getItem('theme')
+        const theme =
+          stored === 'light' || stored === 'dark'
+            ? stored
+            : window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
+        document.documentElement.dataset.theme = theme
+      })()
+    </script>
+
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <title>Boludle</title>
+
+    <!-- Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-DW4L6XK6P0"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+      gtag('config', 'G-DW4L6XK6P0')
+    </script>
+  </head>
+  <body>
+    <noscript>Necesitás JavaScript habilitado para jugar al Boludle.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
