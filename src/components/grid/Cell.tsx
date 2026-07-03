@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import classnames from 'classnames'
 import { motion } from 'motion/react'
 import type { CharStatus } from '../../lib/statuses'
@@ -29,42 +30,59 @@ export const Cell = ({
   const delayMs = position * REVEAL_TIME_MS
   const flipDurationS = (REVEAL_TIME_MS * 1.4) / 1000
 
+  // Colors must flip in at the midpoint of the flip animation, when the
+  // cell is edge-on and effectively invisible, rather than at mount time.
+  const [showStatus, setShowStatus] = useState(!shouldReveal)
+
+  useEffect(() => {
+    if (!shouldReveal) {
+      setShowStatus(true)
+      return
+    }
+    setShowStatus(false)
+    const timeout = setTimeout(
+      () => setShowStatus(true),
+      delayMs + (flipDurationS * 1000) / 2
+    )
+    return () => clearTimeout(timeout)
+  }, [shouldReveal, delayMs, flipDurationS])
+
   const classes = classnames(
-    'w-14 h-14 border-2 flex items-center justify-center mx-0.5 text-3xl font-sans font-bold rounded-lg transition-colors',
-    status
+    'w-14 h-14 border-2 flex items-center justify-center mx-0.5 text-3xl font-sans font-bold rounded-lg',
+    status && showStatus
       ? STATUS_CLASSES[status]
       : 'bg-surface-raised border-border text-ink',
     { 'border-accent': isFilled }
   )
 
   return (
-    <motion.div
-      className={classes}
-      style={{
-        transitionDelay: shouldReveal
-          ? `${delayMs + flipDurationS * 500}ms`
-          : '0ms',
-      }}
-      initial={false}
-      animate={
-        shouldReveal
-          ? { rotateX: [0, 90, 0] }
-          : isFilled
-            ? { scale: [0.85, 1] }
-            : undefined
-      }
-      transition={
-        shouldReveal
-          ? {
-              duration: flipDurationS,
-              times: [0, 0.5, 1],
-              delay: delayMs / 1000,
-              ease: 'easeIn',
-            }
-          : { duration: 0.1 }
-      }
-    >
-      {value}
-    </motion.div>
+    <div style={{ perspective: '400px' }}>
+      <motion.div
+        className={classes}
+        style={{ transformStyle: 'preserve-3d' }}
+        initial={shouldReveal ? { rotateX: 0 } : false}
+        animate={
+          shouldReveal
+            ? { rotateX: [0, 90, 0] }
+            : isCompleted
+              ? { rotateX: 0 }
+              : isFilled
+                ? { scale: [0.85, 1] }
+                : undefined
+        }
+        transition={
+          shouldReveal
+            ? {
+                duration: flipDurationS,
+                times: [0, 0.5, 1],
+                delay: delayMs / 1000,
+                ease: 'easeIn',
+              }
+            : { duration: 0.1 }
+        }
+      >
+        {value}
+      </motion.div>
+    </div>
   )
 }
