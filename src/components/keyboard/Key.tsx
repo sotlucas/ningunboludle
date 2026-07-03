@@ -35,7 +35,6 @@ export const Key = ({
       transition: isRevealing,
       'bg-surface-raised text-ink hover:bg-accent-dim active:bg-accent-dim':
         !status,
-      [value === 'Ñ' ? 'ring-2 ring-accent' : '']: value === 'Ñ' && !status,
     },
     status ? STATUS_CLASSES[status] : undefined
   )
