@@ -5,7 +5,10 @@ import { BaseModal } from './BaseModal'
 import { DefinitionReveal } from './DefinitionReveal'
 import { CountdownToNextWord } from './CountdownToNextWord'
 import { ShareButton } from './ShareButton'
-import { STATISTICS_TITLE, GUESS_DISTRIBUTION_TEXT } from '../../constants/strings'
+import {
+  STATISTICS_TITLE,
+  GUESS_DISTRIBUTION_TEXT,
+} from '../../constants/strings'
 
 type Props = {
   isOpen: boolean
@@ -38,7 +41,7 @@ export const StatsModal = ({
         {isGameOver && (
           <>
             <DefinitionReveal />
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center justify-center gap-3">
               <CountdownToNextWord />
             </div>
             <ShareButton
