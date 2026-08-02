@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { BaseModal } from '../../../components/modals/BaseModal'
+import { StatBar } from '../../../components/stats/StatBar'
+import type { GameStats } from '../../../lib/localStorage'
 import { useTime } from '../hooks'
 import type { EmojiRepresentation } from '../share'
 import { getPuzzleNumber, shareStatus } from '../share'
@@ -9,6 +11,8 @@ type Props = {
   isOpen: boolean
   handleClose: () => void
   emojiRepresentation: EmojiRepresentation
+  gameStats: GameStats
+  gameEnded: boolean
   gameWon: boolean
   onShare: () => void
 }
@@ -29,36 +33,51 @@ export const EndScreenModal = ({
   isOpen,
   handleClose,
   emojiRepresentation,
+  gameStats,
+  gameEnded,
   gameWon,
   onShare,
 }: Props) => {
   const timeLeft = useTimeUntilMidnight()
 
-  const title = getTitleText(gameWon)
+  const title = gameEnded ? getTitleText(gameWon) : 'Estadísticas'
   return (
     <BaseModal title={title} isOpen={isOpen} handleClose={handleClose}>
-      <div className="flex flex-col gap-4 items-center text-ink-soft">
-        <p className="font-semibold text-ink">{`Conexiones Argentinas #${getPuzzleNumber()}`}</p>
+      <div className="flex flex-col gap-5">
+        {gameEnded && (
+          <div className="flex flex-col gap-4 items-center text-ink-soft">
+            <p className="font-semibold text-ink">{`Conexiones Argentinas #${getPuzzleNumber()}`}</p>
 
-        <EmojiGrid emojiRepresentation={emojiRepresentation} />
-        <div className="text-center">
-          <div className="text-xs uppercase tracking-wide text-ink-muted">
-            Próximo Conexiones en
+            <EmojiGrid emojiRepresentation={emojiRepresentation} />
+            <div className="text-center">
+              <div className="text-xs uppercase tracking-wide text-ink-muted">
+                Próximo Conexiones en
+              </div>
+              <div className="font-mono text-2xl font-medium text-ink">
+                {formatTime(timeLeft)}
+              </div>
+            </div>
+
+            <Button
+              onSubmit={() => {
+                shareStatus(emojiRepresentation, onShare)
+              }}
+              label="Copiar resultado"
+              active
+              timeoutAfterClick={0}
+              filled
+            />
           </div>
-          <div className="font-mono text-2xl font-medium text-ink">
-            {formatTime(timeLeft)}
-          </div>
+        )}
+
+        <div>
+          {gameEnded && (
+            <h4 className="mb-2 text-center font-display text-lg font-bold text-ink">
+              Estadísticas
+            </h4>
+          )}
+          <StatBar gameStats={gameStats} />
         </div>
-
-        <Button
-          onSubmit={() => {
-            shareStatus(emojiRepresentation, onShare)
-          }}
-          label="Copiar resultado"
-          active
-          timeoutAfterClick={0}
-          filled
-        />
       </div>
     </BaseModal>
   )

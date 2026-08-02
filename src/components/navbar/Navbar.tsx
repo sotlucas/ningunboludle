@@ -1,7 +1,5 @@
-import { Info, BarChart3, Sun, Moon } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import ImgMate from '../../assets/mate.png'
-import { useTheme } from '../../hooks/useTheme'
+import { BarChart3 } from 'lucide-react'
+import { GameNavbar } from './GameNavbar'
 
 type Props = {
   setIsInfoModalOpen: (value: boolean) => void
@@ -9,64 +7,20 @@ type Props = {
 }
 
 export const Navbar = ({ setIsInfoModalOpen, setIsStatsModalOpen }: Props) => {
-  const { theme, toggleTheme } = useTheme()
-
   return (
-    <header className="border-b border-border-soft">
-      <div className="bg-accent-dim px-4 py-2 text-center">
-        <p className="text-xs italic text-ink-soft">
-          Jugá a nuestro nuevo juego:{' '}
-          <Link className="font-semibold text-accent underline" to="/conexiones">
-            ConexionesArgentinas
-          </Link>
-        </p>
-      </div>
-      <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
+    <GameNavbar
+      title="boludle"
+      onInfoClick={() => setIsInfoModalOpen(true)}
+      actions={
         <button
           type="button"
-          onClick={() => setIsInfoModalOpen(true)}
-          aria-label="cómo jugar"
+          onClick={() => setIsStatsModalOpen(true)}
+          aria-label="estadísticas"
           className="text-ink-soft transition-colors hover:text-ink"
         >
-          <Info className="h-5 w-5" />
+          <BarChart3 className="h-5 w-5" />
         </button>
-
-        <Link
-          to="/"
-          className="flex items-center gap-1.5 select-none"
-          aria-label="volver al inicio"
-        >
-          <h1 className="font-display text-2xl font-bold tracking-tight text-ink">
-            boludle
-          </h1>
-          <img className="h-6 w-6" src={ImgMate} alt="" />
-        </Link>
-
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            aria-label={
-              theme === 'dark' ? 'cambiar a modo claro' : 'cambiar a modo oscuro'
-            }
-            className="text-ink-soft transition-colors hover:text-ink"
-          >
-            {theme === 'dark' ? (
-              <Sun className="h-5 w-5" />
-            ) : (
-              <Moon className="h-5 w-5" />
-            )}
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsStatsModalOpen(true)}
-            aria-label="estadísticas"
-            className="text-ink-soft transition-colors hover:text-ink"
-          >
-            <BarChart3 className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
-    </header>
+      }
+    />
   )
 }

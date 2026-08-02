@@ -1,0 +1,55 @@
+import type { GameStats } from '../../lib/localStorage'
+import {
+  loadStatsFromLocalStorage,
+  saveStatsToLocalStorage,
+} from './localStorage'
+
+const MAX_INCORRECT_ATTEMPTS = 4
+
+export const addStatsForCompletedGame = (
+  gameStats: GameStats,
+  won: boolean,
+  numberOfIncorrectAttempts: number
+): GameStats => {
+  const stats = { ...gameStats, winDistribution: [...gameStats.winDistribution] }
+
+  stats.totalGames += 1
+
+  if (!won) {
+    stats.currentStreak = 0
+    stats.gamesFailed += 1
+  } else {
+    stats.winDistribution[numberOfIncorrectAttempts] += 1
+    stats.currentStreak += 1
+
+    if (stats.bestStreak < stats.currentStreak) {
+      stats.bestStreak = stats.currentStreak
+    }
+  }
+
+  stats.successRate = getSuccessRate(stats)
+
+  saveStatsToLocalStorage(stats)
+  return stats
+}
+
+const defaultStats: GameStats = {
+  winDistribution: Array.from(new Array(MAX_INCORRECT_ATTEMPTS), () => 0),
+  gamesFailed: 0,
+  currentStreak: 0,
+  bestStreak: 0,
+  totalGames: 0,
+  successRate: 0,
+}
+
+export const loadStats = () => {
+  return loadStatsFromLocalStorage() ?? defaultStats
+}
+
+const getSuccessRate = (gameStats: GameStats) => {
+  const { totalGames, gamesFailed } = gameStats
+
+  return Math.round(
+    (100 * (totalGames - gamesFailed)) / Math.max(totalGames, 1)
+  )
+}

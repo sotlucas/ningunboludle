@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { Position, TileData, TileTransitionStatus } from "./Tile"
 import type { Solution } from "./components/SolutionRow"
 import { shuffleSubsetInplace } from "./arrayUtil"
+import { loadGameStateFromLocalStorage, saveGameStateToLocalStorage } from "./localStorage"
+import { useStats } from "./useStats"
 
 export type Attempt = {
   correct: boolean
@@ -17,7 +19,9 @@ export type Grouping = {
 
 const orderedPositions = createOrderedPositions()
 
-export function useGameState({ groupings, shuffleInitial, oneAwayFn }: { groupings: Grouping[], shuffleInitial: boolean, oneAwayFn: () => void }) {
+export function useGameState({ groupings, shuffleInitial, oneAwayFn, puzzleNumber }: { groupings: Grouping[], shuffleInitial: boolean, oneAwayFn: () => void, puzzleNumber: number }) {
+
+  const { stats, recordGame } = useStats()
 
   const [data, setData] = useState<{ word: string, status: TileTransitionStatus }[]>(() => [])
   const wordList = data.flatMap(d => d.word)
@@ -25,7 +29,12 @@ export function useGameState({ groupings, shuffleInitial, oneAwayFn }: { groupin
   const [gameWon, setGameWon] = useState(false)
   const [positions, setPositions] = useState<Position[]>(() => orderedPositions)
   const [selectedWords, setSelectedWords] = useState<string[]>(() => [])
-  const [attempts, setAttempts] = useState<Attempt[]>(() => [])
+  const [attempts, setAttempts] = useState<Attempt[]>(() => {
+    const loaded = loadGameStateFromLocalStorage()
+    if (loaded?.puzzleNumber !== puzzleNumber) return []
+    return loaded.attempts
+  })
+  const isRestoringRef = useRef(attempts.length > 0)
 
   const words = data.map(d => d.word)
 
@@ -44,6 +53,10 @@ export function useGameState({ groupings, shuffleInitial, oneAwayFn }: { groupin
     const shuffledWords = shuffleInitial ? shuffleSubsetInplace([...words], words.map((_, index) => index)) : [...words]
     setData(() => [...shuffledWords].map(word => ({ word: word, status: undefined })))
   }, [groupings, shuffleInitial])
+
+  useEffect(() => {
+    saveGameStateToLocalStorage({ puzzleNumber, attempts })
+  }, [attempts, puzzleNumber])
 
   useEffect(() => {
     if (noOfAttemptsRemaining === 0 || solutions.length === 4) {
@@ -94,11 +107,39 @@ export function useGameState({ groupings, shuffleInitial, oneAwayFn }: { groupin
 
     const correct = !!areSameGroup(submittedWords, groupings)
     addAttempt({ correct: correct, words: submittedWords, by: autoAttempt ? 'auto' : 'user' })
+
+    if (autoAttempt) return
+
+    const willBeCorrectCount = correctAttempts.length + (correct ? 1 : 0)
+    const willBeIncorrectCount = numberOfIncorrectAttempts + (correct ? 0 : 1)
+
+    if (correct && willBeCorrectCount === 4) {
+      recordGame(true, numberOfIncorrectAttempts)
+    } else if (!correct && willBeIncorrectCount === 4) {
+      recordGame(false, 4)
+    }
+  }
+
+  function applyAllAttemptsInstantly(allAttempts: Attempt[]) {
+    let solvedCount = 0
+    for (const attempt of allAttempts) {
+      if (attempt.correct) {
+        toTop(attempt.words, solvedCount)
+        attempt.words.forEach(word => setTileStatus(word, "solved"))
+        solvedCount++
+      }
+    }
   }
 
   useEffect(() => {
     const lastAttempt = attempts.at(-1)
     if (!lastAttempt) return
+
+    if (isRestoringRef.current) {
+      isRestoringRef.current = false
+      applyAllAttemptsInstantly(attempts)
+      return
+    }
 
     if (lastAttempt.correct) {
       const rowIndex = Math.min(noOfSolutions - 1, 3)
@@ -238,7 +279,9 @@ export function useGameState({ groupings, shuffleInitial, oneAwayFn }: { groupin
     noOfAttemptsRemaining: noOfAttemptsRemaining,
     gameEnded: gameEnded,
     gameWon: gameWon,
-    autoSolveEnded: autoSolveEnded
+    autoSolveEnded: autoSolveEnded,
+    stats: stats,
+    numberOfIncorrectAttempts: numberOfIncorrectAttempts,
   }
 }
 

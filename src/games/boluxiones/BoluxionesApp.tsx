@@ -6,6 +6,7 @@ import { emptyGrouping, useGroupings } from './words'
 import { InfoModal } from './modals/InfoModal'
 import { EndScreenModal } from './modals/EndScreenModal'
 import { useGameState } from './useGameState'
+import { getPuzzleNumber } from './share'
 import { Navbar } from './components/Navbar'
 import { Tile } from './Tile'
 import { Button } from './components/Button'
@@ -47,6 +48,7 @@ function getDateArgentina() {
 
 export default function BoluxionesApp() {
   const groupings = useGroupings(getDateArgentina())
+  const puzzleNumber = getPuzzleNumber()
 
   const { label, active, triggerAlert } = useAlertState()
 
@@ -62,10 +64,12 @@ export default function BoluxionesApp() {
     gameWon,
     autoSolveEnded,
     emojiRepresentation,
+    stats,
   } = useGameState({
     groupings: groupings ?? emptyGrouping,
     shuffleInitial: true,
     oneAwayFn: () => triggerAlert('Estás a una palabra...', 500, 2_000),
+    puzzleNumber,
   })
 
   const noOfAttemptsRemainingDelayed = useDelay(noOfAttemptsRemaining, 1_000)
@@ -74,16 +78,16 @@ export default function BoluxionesApp() {
   const [tileHeight, setTileHeight] = useState<number>()
 
   const [isInfoOpen, setIsInfoOpen] = useState(true)
-  const [isEndScreenOpen, setIsEndScreenOpen] = useState(false)
+  const [isStatsOpen, setIsStatsOpen] = useState(false)
 
   useEffect(() => {
     if (autoSolveEnded) {
-      setIsEndScreenOpen(true)
+      setIsStatsOpen(true)
     }
   }, [autoSolveEnded])
 
   function share() {
-    setIsEndScreenOpen(true)
+    setIsStatsOpen(true)
   }
 
   if (!groupings) {
@@ -114,13 +118,15 @@ export default function BoluxionesApp() {
     <div className="flex min-h-dvh flex-col">
       <InfoModal isOpen={isInfoOpen} handleClose={() => setIsInfoOpen(false)} />
       <EndScreenModal
-        isOpen={isEndScreenOpen}
-        handleClose={() => setIsEndScreenOpen(false)}
+        isOpen={isStatsOpen}
+        handleClose={() => setIsStatsOpen(false)}
         emojiRepresentation={emojiRepresentation}
+        gameStats={stats}
+        gameEnded={autoSolveEnded}
         gameWon={gameWon}
         onShare={() => triggerAlert('Copiado', 0, 5_000)}
       />
-      <Navbar setIsInfoModalOpen={setIsInfoOpen} />
+      <Navbar setIsInfoModalOpen={setIsInfoOpen} setIsStatsModalOpen={setIsStatsOpen} />
       <div className="mx-auto flex w-full max-w-lg grow flex-col px-3 pb-8 pt-4">
         <div className="flex justify-center items-center">
           <div className="relative flex items-center gap-1 text-ink-soft">
