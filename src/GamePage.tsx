@@ -12,8 +12,10 @@ import { Navbar } from './components/navbar/Navbar'
 import { useGameState } from './hooks/useGameState'
 import { usePageMeta } from './hooks/usePageMeta'
 import { GAMES } from './constants/games'
+import { GameLoadingScreen } from './components/GameLoadingScreen'
 
 const boludleMeta = GAMES.find((game) => game.slug === 'boludle')!
+const SIMULATED_LOADING_MS = 900
 
 function GamePage() {
   usePageMeta({
@@ -28,6 +30,8 @@ function GamePage() {
   // captured synchronously on first render, before useGameState's own
   // effect has a chance to persist the (possibly empty) game state
   const [hadSavedGameOnMount] = useState(() => !!loadGameStateFromLocalStorage())
+  const [showLoading, setShowLoading] = useState(true)
+  const [simulatedReady, setSimulatedReady] = useState(false)
 
   const {
     guesses,
@@ -49,6 +53,21 @@ function GamePage() {
       }, WELCOME_INFO_MODAL_MS)
     }
   }, [hadSavedGameOnMount])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setSimulatedReady(true), SIMULATED_LOADING_MS)
+    return () => clearTimeout(timeout)
+  }, [])
+
+  if (showLoading) {
+    return (
+      <GameLoadingScreen
+        game={boludleMeta}
+        ready={simulatedReady}
+        onExitComplete={() => setShowLoading(false)}
+      />
+    )
+  }
 
   return (
     <div className="flex min-h-dvh flex-col">
