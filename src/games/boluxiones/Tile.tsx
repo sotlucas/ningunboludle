@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useContainer } from "./hooks"
 import { twMerge } from "tailwind-merge"
 
-export type TileTransitionStatus = "solved" | "attempt" | "wrong" | undefined
+export type TileTransitionStatus = "solved" | "restored" | "attempt" | "wrong" | undefined
 
 export type TileData = {
   word: string
@@ -64,9 +64,15 @@ export function Tile({ setTileHeight, tileData, containerWidth }: { setTileHeigh
     className={twMerge("cursor-pointer aspect-square transition")}
     style={{
       transform: `translate(${translateX}px, ${translateY}px)`,
-      transitionDuration: `400ms`,
-      transitionDelay: `1000ms`,
-      opacity: status === 'solved' ? 0 : 1,
+      transitionProperty: 'transform, opacity',
+      // Restored tiles (already solved on page load) have nothing to animate
+      // from, so they skip straight to their final state. Live solves bounce
+      // in place first, then slide into the solved row, then fade out once
+      // the solution row has had time to reveal itself (see SolutionRow's
+      // own 1500ms delay) so the tile doesn't vanish before the group does.
+      transitionDuration: status === 'restored' ? `0ms, 0ms` : `400ms, 450ms`,
+      transitionDelay: status === 'restored' ? `0ms, 0ms` : `1000ms, 400ms`,
+      opacity: status === 'solved' || status === 'restored' ? 0 : 1,
       zIndex: zIndex
     }}
   >

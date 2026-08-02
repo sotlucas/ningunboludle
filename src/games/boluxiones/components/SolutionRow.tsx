@@ -19,7 +19,7 @@ export function SolutionRow({ height, solution }: { height?: number, solution?: 
         active ? 'opacity-100' : 'opacity-0',
         active && "animate-scale-big-normal"
       )}
-      style={{ height: height, zIndex: 100 }}>
+      style={{ height: height }}>
       <div className="flex flex-col h-full justify-center items-center uppercase">
         <div className="text-center font-bold">{solution?.group}</div>
         <div className="text-center">{solution?.words.join(', ')}</div>

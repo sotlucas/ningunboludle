@@ -46,12 +46,14 @@ export function useGameState({ groupings, shuffleInitial, oneAwayFn, puzzleNumbe
   const wordsInPlay = wordList.filter(word => !wordsOutOfPlay.includes(word))
 
   const solutions: Solution[] = correctAttempts.map(attempt => (groupings.find(grouping => grouping.group === areSameGroup(attempt.words, groupings)!)!))
-  const noOfSolutions = solutions.length
 
   useEffect(() => {
-    const words = groupings.flatMap(grouping => grouping.words)
-    const shuffledWords = shuffleInitial ? shuffleSubsetInplace([...words], words.map((_, index) => index)) : [...words]
-    setData(() => [...shuffledWords].map(word => ({ word: word, status: undefined })))
+    setData(prevData => {
+      if (prevData.length > 0) return prevData
+      const words = groupings.flatMap(grouping => grouping.words)
+      const shuffledWords = shuffleInitial ? shuffleSubsetInplace([...words], words.map((_, index) => index)) : [...words]
+      return shuffledWords.map(word => ({ word: word, status: undefined }))
+    })
   }, [groupings, shuffleInitial])
 
   useEffect(() => {
@@ -122,59 +124,77 @@ export function useGameState({ groupings, shuffleInitial, oneAwayFn, puzzleNumbe
 
   function applyAllAttemptsInstantly(allAttempts: Attempt[]) {
     let solvedCount = 0
+    let updatedPositions = positions
     for (const attempt of allAttempts) {
       if (attempt.correct) {
-        toTop(attempt.words, solvedCount)
-        attempt.words.forEach(word => setTileStatus(word, "solved"))
+        updatedPositions = computeTopPositions(updatedPositions, attempt.words, solvedCount)
+        attempt.words.forEach(word => setTileStatus(word, "restored"))
         solvedCount++
       }
     }
+    setPositions(updatedPositions)
   }
 
+  const processedAttemptsCountRef = useRef(0)
+
   useEffect(() => {
-    const lastAttempt = attempts.at(-1)
-    if (!lastAttempt) return
+    if (data.length === 0) return
 
     if (isRestoringRef.current) {
       isRestoringRef.current = false
       applyAllAttemptsInstantly(attempts)
+      processedAttemptsCountRef.current = attempts.length
       return
     }
 
-    if (lastAttempt.correct) {
-      const rowIndex = Math.min(noOfSolutions - 1, 3)
-      toTop(lastAttempt.words, rowIndex)
-      setTimeout(() => setTileStatus(lastAttempt.words[0], "attempt"), 0)
-      setTimeout(() => setTileStatus(lastAttempt.words[1], "attempt"), 100)
-      setTimeout(() => setTileStatus(lastAttempt.words[2], "attempt"), 200)
-      setTimeout(() => setTileStatus(lastAttempt.words[3], "attempt"), 300)
-      setTimeout(() => setTileStatus(lastAttempt.words[0], "solved"), 1_000)
-      setTimeout(() => setTileStatus(lastAttempt.words[1], "solved"), 1_000)
-      setTimeout(() => setTileStatus(lastAttempt.words[2], "solved"), 1_000)
-      setTimeout(() => setTileStatus(lastAttempt.words[3], "solved"), 1_000)
-      setTimeout(() => deselectAll(), 2_000)
-    } else if (oneAway(lastAttempt.words, groupings)) {
-      oneAwayFn()
-      setTimeout(() => setTileStatus(lastAttempt.words[0], "attempt"), 0)
-      setTimeout(() => setTileStatus(lastAttempt.words[1], "attempt"), 100)
-      setTimeout(() => setTileStatus(lastAttempt.words[2], "attempt"), 200)
-      setTimeout(() => setTileStatus(lastAttempt.words[3], "attempt"), 300)
-      setTimeout(() => setTileStatus(lastAttempt.words[0], "wrong"), 1_000)
-      setTimeout(() => setTileStatus(lastAttempt.words[1], "wrong"), 1_000)
-      setTimeout(() => setTileStatus(lastAttempt.words[2], "wrong"), 1_000)
-      setTimeout(() => setTileStatus(lastAttempt.words[3], "wrong"), 1_000)
-    } else {
-      setTimeout(() => setTileStatus(lastAttempt.words[0], "attempt"), 0)
-      setTimeout(() => setTileStatus(lastAttempt.words[1], "attempt"), 100)
-      setTimeout(() => setTileStatus(lastAttempt.words[2], "attempt"), 200)
-      setTimeout(() => setTileStatus(lastAttempt.words[3], "attempt"), 300)
-      setTimeout(() => setTileStatus(lastAttempt.words[0], "wrong"), 1_000)
-      setTimeout(() => setTileStatus(lastAttempt.words[1], "wrong"), 1_000)
-      setTimeout(() => setTileStatus(lastAttempt.words[2], "wrong"), 1_000)
-      setTimeout(() => setTileStatus(lastAttempt.words[3], "wrong"), 1_000)
-    }
+    const newAttempts = attempts.slice(processedAttemptsCountRef.current)
+    if (newAttempts.length === 0) return
+
+    let updatedPositions = positions
+    let solvedCount = attempts.slice(0, processedAttemptsCountRef.current).filter(attempt => attempt.correct).length
+
+    newAttempts.forEach((attempt, offset) => {
+      const delay = offset * 2_100
+
+      if (attempt.correct) {
+        const rowIndex = Math.min(solvedCount, 3)
+        updatedPositions = computeTopPositions(updatedPositions, attempt.words, rowIndex)
+        solvedCount++
+        setTimeout(() => setTileStatus(attempt.words[0], "attempt"), delay)
+        setTimeout(() => setTileStatus(attempt.words[1], "attempt"), delay + 100)
+        setTimeout(() => setTileStatus(attempt.words[2], "attempt"), delay + 200)
+        setTimeout(() => setTileStatus(attempt.words[3], "attempt"), delay + 300)
+        setTimeout(() => setTileStatus(attempt.words[0], "solved"), delay + 1_000)
+        setTimeout(() => setTileStatus(attempt.words[1], "solved"), delay + 1_000)
+        setTimeout(() => setTileStatus(attempt.words[2], "solved"), delay + 1_000)
+        setTimeout(() => setTileStatus(attempt.words[3], "solved"), delay + 1_000)
+        setTimeout(() => deselectAll(), delay + 1_900)
+      } else if (oneAway(attempt.words, groupings)) {
+        oneAwayFn()
+        setTimeout(() => setTileStatus(attempt.words[0], "attempt"), delay)
+        setTimeout(() => setTileStatus(attempt.words[1], "attempt"), delay + 100)
+        setTimeout(() => setTileStatus(attempt.words[2], "attempt"), delay + 200)
+        setTimeout(() => setTileStatus(attempt.words[3], "attempt"), delay + 300)
+        setTimeout(() => setTileStatus(attempt.words[0], "wrong"), delay + 1_000)
+        setTimeout(() => setTileStatus(attempt.words[1], "wrong"), delay + 1_000)
+        setTimeout(() => setTileStatus(attempt.words[2], "wrong"), delay + 1_000)
+        setTimeout(() => setTileStatus(attempt.words[3], "wrong"), delay + 1_000)
+      } else {
+        setTimeout(() => setTileStatus(attempt.words[0], "attempt"), delay)
+        setTimeout(() => setTileStatus(attempt.words[1], "attempt"), delay + 100)
+        setTimeout(() => setTileStatus(attempt.words[2], "attempt"), delay + 200)
+        setTimeout(() => setTileStatus(attempt.words[3], "attempt"), delay + 300)
+        setTimeout(() => setTileStatus(attempt.words[0], "wrong"), delay + 1_000)
+        setTimeout(() => setTileStatus(attempt.words[1], "wrong"), delay + 1_000)
+        setTimeout(() => setTileStatus(attempt.words[2], "wrong"), delay + 1_000)
+        setTimeout(() => setTileStatus(attempt.words[3], "wrong"), delay + 1_000)
+      }
+    })
+
+    setPositions(updatedPositions)
+    processedAttemptsCountRef.current = attempts.length
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [attempts])
+  }, [attempts, data])
 
   function wordToPosition(positions: Position[], srcWord: string, dstPosition: Position): Position[] {
 
@@ -192,13 +212,13 @@ export function useGameState({ groupings, shuffleInitial, oneAwayFn, puzzleNumbe
     })
   }
 
-  function toTop(words: string[], row: number) {
-    let currentPositions = [...positions]
-    currentPositions = wordToPosition(currentPositions, words[0], { i: row, j: 0 })
-    currentPositions = wordToPosition(currentPositions, words[1], { i: row, j: 1 })
-    currentPositions = wordToPosition(currentPositions, words[2], { i: row, j: 2 })
-    currentPositions = wordToPosition(currentPositions, words[3], { i: row, j: 3 })
-    setPositions(currentPositions)
+  function computeTopPositions(basePositions: Position[], words: string[], row: number): Position[] {
+    let updatedPositions = [...basePositions]
+    updatedPositions = wordToPosition(updatedPositions, words[0], { i: row, j: 0 })
+    updatedPositions = wordToPosition(updatedPositions, words[1], { i: row, j: 1 })
+    updatedPositions = wordToPosition(updatedPositions, words[2], { i: row, j: 2 })
+    updatedPositions = wordToPosition(updatedPositions, words[3], { i: row, j: 3 })
+    return updatedPositions
   }
 
   function addSelectedWord(word: string) {

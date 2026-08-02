@@ -30,20 +30,20 @@ export const BaseModal = ({ title, children, isOpen, handleClose }: Props) => {
       static
       open={isOpen}
       onClose={handleCloseAndBlur}
-      className={`fixed inset-0 z-50 ${isOpen ? '' : 'pointer-events-none'}`}
+      className={`fixed inset-0 z-200 ${isOpen ? '' : 'pointer-events-none'}`}
     >
       <AnimatePresence>
         {isOpen && (
           <>
             <motion.div
-              className="fixed inset-0 bg-[#0d1420]/60 backdrop-blur-sm"
+              className="fixed inset-0 z-200 bg-[#0d1420]/60 backdrop-blur-sm"
               aria-hidden="true"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
             />
-            <div className="fixed inset-0 flex items-end justify-center sm:items-center">
+            <div className="fixed inset-0 z-200 flex items-end justify-center sm:items-center">
               <DialogPanel className="contents">
                 <motion.div
                   initial={{ y: '100%', opacity: 0 }}
