@@ -1,6 +1,9 @@
-import { getTodayDateString, daysBetween } from './date'
+import { getTodayDateString, getYesterdayDateString, daysBetween } from './date'
+import { loadStatsFromLocalStorage as loadBoludleStats } from './localStorage'
+import { loadStatsFromLocalStorage as loadBoluxionesStats } from '../games/boluxiones/localStorage'
 
 const globalStreakKey = 'globalStreak'
+const migratedKey = 'globalStreakMigrated'
 
 type GlobalStreak = {
   lastPlayedDate: string
@@ -14,9 +17,32 @@ const defaultStreak: GlobalStreak = {
   bestStreak: 0,
 }
 
+// One-time bootstrap so players who already had a streak going in a single
+// game (before the global streak existed) don't see it reset to 1.
+const migrateFromGameStreaks = (stored: GlobalStreak): GlobalStreak => {
+  if (localStorage.getItem(migratedKey)) return stored
+  localStorage.setItem(migratedKey, '1')
+
+  const bootstrapStreak = Math.max(
+    loadBoludleStats()?.currentStreak ?? 0,
+    loadBoluxionesStats()?.currentStreak ?? 0
+  )
+
+  if (bootstrapStreak <= stored.currentStreak) return stored
+
+  const migrated: GlobalStreak = {
+    lastPlayedDate: stored.lastPlayedDate || getYesterdayDateString(),
+    currentStreak: bootstrapStreak,
+    bestStreak: Math.max(stored.bestStreak, bootstrapStreak),
+  }
+  localStorage.setItem(globalStreakKey, JSON.stringify(migrated))
+  return migrated
+}
+
 const load = (): GlobalStreak => {
   const raw = localStorage.getItem(globalStreakKey)
-  return raw ? (JSON.parse(raw) as GlobalStreak) : defaultStreak
+  const stored = raw ? (JSON.parse(raw) as GlobalStreak) : defaultStreak
+  return migrateFromGameStreaks(stored)
 }
 
 export const recordPlayedToday = () => {
