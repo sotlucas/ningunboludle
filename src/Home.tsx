@@ -1,7 +1,13 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Sun, Moon, Check } from 'lucide-react'
+import { Sun, Moon, Check, Flame } from 'lucide-react'
 import { useTheme } from './hooks/useTheme'
 import { GAMES, type GameMeta } from './constants/games'
+import { getDisplayStreak, recordPlayedToday } from './lib/globalStreak'
+import {
+  GLOBAL_STREAK_TEXT,
+  GLOBAL_STREAK_EMPTY_TEXT,
+} from './constants/strings'
 import ImgMate from './assets/mate.png'
 
 type GameCardProps = {
@@ -35,6 +41,14 @@ function GameCard({ game }: GameCardProps) {
 
 function Home() {
   const { theme, toggleTheme } = useTheme()
+  const [streak, setStreak] = useState(() => getDisplayStreak())
+
+  useEffect(() => {
+    if (GAMES.some((game) => game.isCompletedToday())) {
+      recordPlayedToday()
+      setStreak(getDisplayStreak())
+    }
+  }, [])
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -68,6 +82,16 @@ function Home() {
           <p className="mt-2 text-sm text-ink-soft">
             Elegí un juego para jugar
           </p>
+        </div>
+
+        <div className="mb-6 flex items-center justify-center gap-2 rounded-2xl border border-border-soft bg-surface py-3">
+          <Flame
+            className={`h-5 w-5 ${streak > 0 ? 'text-orange-500' : 'text-ink-muted'}`}
+            fill={streak > 0 ? 'currentColor' : 'none'}
+          />
+          <span className="text-sm font-medium text-ink">
+            {streak > 0 ? GLOBAL_STREAK_TEXT(streak) : GLOBAL_STREAK_EMPTY_TEXT}
+          </span>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">

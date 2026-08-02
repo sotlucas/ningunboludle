@@ -28,3 +28,6 @@ export const TOTAL_TRIES_TEXT = 'total de jugadas'
 export const SUCCESS_RATE_TEXT = 'aciertos'
 export const CURRENT_STREAK_TEXT = 'racha actual'
 export const BEST_STREAK_TEXT = 'mejor racha'
+export const GLOBAL_STREAK_TEXT = (days: number) =>
+  `${days} día${days === 1 ? '' : 's'} seguido${days === 1 ? '' : 's'}`
+export const GLOBAL_STREAK_EMPTY_TEXT = 'jugá hoy para empezar tu racha'
