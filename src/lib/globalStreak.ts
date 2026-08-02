@@ -1,4 +1,4 @@
-import { getTodayDateString, getYesterdayDateString, daysBetween } from './date'
+import { getTodayDateString, getYesterdayDateString, canContinueStreak } from './date'
 import { loadStatsFromLocalStorage as loadBoludleStats } from './localStorage'
 import { loadStatsFromLocalStorage as loadBoluxionesStats } from '../games/boluxiones/localStorage'
 
@@ -51,10 +51,9 @@ export const recordPlayedToday = () => {
 
   if (stored.lastPlayedDate === today) return
 
-  const gap = stored.lastPlayedDate
-    ? daysBetween(stored.lastPlayedDate, today)
-    : null
-  const currentStreak = gap === 1 ? stored.currentStreak + 1 : 1
+  const canContinue =
+    !!stored.lastPlayedDate && canContinueStreak(stored.lastPlayedDate, today)
+  const currentStreak = canContinue ? stored.currentStreak + 1 : 1
 
   const updated: GlobalStreak = {
     lastPlayedDate: today,
@@ -67,6 +66,7 @@ export const recordPlayedToday = () => {
 export const getDisplayStreak = () => {
   const stored = load()
   if (!stored.lastPlayedDate) return 0
-  const gap = daysBetween(stored.lastPlayedDate, getTodayDateString())
-  return gap <= 1 ? stored.currentStreak : 0
+  return canContinueStreak(stored.lastPlayedDate, getTodayDateString())
+    ? stored.currentStreak
+    : 0
 }
