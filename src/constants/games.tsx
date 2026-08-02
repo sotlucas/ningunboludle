@@ -25,12 +25,8 @@ export const GAMES: GameMeta[] = [
   {
     slug: 'conexiones',
     path: '/conexiones',
-    title: (
-      <>
-        Conexiones <span className="text-accent">Argentinas</span>
-      </>
-    ),
-    tabTitle: 'Conexiones Argentinas · Boludle',
+    title: 'Boluxiones',
+    tabTitle: 'Conexiones Argentinas',
     cardDescription:
       'Armá cuatro grupos de cuatro palabras que tengan algo en común.',
     tabDescription:

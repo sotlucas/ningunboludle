@@ -12,16 +12,12 @@ function GameCard({ game }: GameCardProps) {
   return (
     <Link
       to={game.path}
-      className="group flex flex-col rounded-2xl border border-border bg-surface-raised p-6 shadow-sm transition hover:border-accent hover:shadow-[0_8px_28px_rgba(13,20,32,0.15)]"
+      className="group flex flex-col justify-between text-center rounded-2xl border border-border bg-surface-raised p-6 shadow-sm transition hover:border-accent hover:shadow-[0_8px_28px_rgba(13,20,32,0.15)]"
     >
-      <img className="h-10 w-10 select-none" src={game.icon} alt="" />
+      <img className="mx-auto h-25 w-25 select-none" src={game.icon} alt="" />
       <h2 className="mt-3 font-display text-2xl font-bold tracking-tight text-ink">
         {game.title}
       </h2>
-      <p className="mt-1 text-sm text-ink-soft">{game.cardDescription}</p>
-      <span className="mt-4 text-sm font-semibold text-accent group-hover:underline">
-        Jugar →
-      </span>
     </Link>
   )
 }
