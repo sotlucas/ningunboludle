@@ -31,7 +31,7 @@ describe('shareStatus', () => {
     shareStatus(['CACHA'], false, false, false, false, onShared)
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-      'boludle.com #42 1/6\n\n🟩🟩🟩🟩🟩\n\n#boludle'
+      'boludle.sotlucas.dev #42 1/6\n\n🟩🟩🟩🟩🟩\n\n#boludle'
     )
     expect(onShared).toHaveBeenCalledTimes(1)
   })
@@ -40,7 +40,7 @@ describe('shareStatus', () => {
     shareStatus(['CAAHA'], true, false, false, false, vi.fn())
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-      'boludle.com #42 X/6\n\n🟩🟩⬜🟩🟩\n\n#boludle'
+      'boludle.sotlucas.dev #42 X/6\n\n🟩🟩⬜🟩🟩\n\n#boludle'
     )
   })
 })

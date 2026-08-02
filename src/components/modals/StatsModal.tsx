@@ -83,7 +83,7 @@ export const StatsModal = ({
           </a>{' '}
           o via{' '}
           <a
-            href="mailto:info@boludle.com"
+            href="mailto:info@sotlucas.dev"
             className="font-medium text-accent underline"
           >
             mail
