@@ -10,8 +10,18 @@ import { AlertContainer } from './components/alerts/AlertContainer'
 import { useAlert } from './context/AlertContext'
 import { Navbar } from './components/navbar/Navbar'
 import { useGameState } from './hooks/useGameState'
+import { usePageMeta } from './hooks/usePageMeta'
+import { GAMES } from './constants/games'
+
+const boludleMeta = GAMES.find((game) => game.slug === 'boludle')!
 
 function GamePage() {
+  usePageMeta({
+    title: boludleMeta.tabTitle,
+    description: boludleMeta.tabDescription,
+    icon: boludleMeta.icon,
+  })
+
   const { showSuccess: showSuccessAlert } = useAlert()
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)

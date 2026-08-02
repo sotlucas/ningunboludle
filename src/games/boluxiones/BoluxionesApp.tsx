@@ -10,6 +10,10 @@ import { getPuzzleNumber } from './share'
 import { Navbar } from './components/Navbar'
 import { Tile } from './Tile'
 import { Button } from './components/Button'
+import { usePageMeta } from '../../hooks/usePageMeta'
+import { GAMES } from '../../constants/games'
+
+const conexionesMeta = GAMES.find((game) => game.slug === 'conexiones')!
 
 function RemainingDot({ active }: { active?: boolean }) {
   const color = active ? 'text-yellow-400' : 'text-ink-muted'
@@ -47,6 +51,12 @@ function getDateArgentina() {
 }
 
 export default function BoluxionesApp() {
+  usePageMeta({
+    title: conexionesMeta.tabTitle,
+    description: conexionesMeta.tabDescription,
+    icon: conexionesMeta.icon,
+  })
+
   const groupings = useGroupings(getDateArgentina())
   const puzzleNumber = getPuzzleNumber()
 
