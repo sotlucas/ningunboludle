@@ -22,6 +22,7 @@ function GamePage() {
     title: boludleMeta.tabTitle,
     description: boludleMeta.tabDescription,
     icon: boludleMeta.icon,
+    url: `https://boludle.sotlucas.dev${boludleMeta.path}`,
   })
 
   const { showSuccess: showSuccessAlert } = useAlert()

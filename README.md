@@ -1,3 +1,3 @@
 # Boludle
 
-https://www.boludle.com/
+https://boludle.sotlucas.dev/

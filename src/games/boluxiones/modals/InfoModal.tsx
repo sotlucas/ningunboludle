@@ -71,9 +71,9 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
           Por los creadores de{' '}
           <span
             className="underline font-bold"
-            onClick={() => window.open('https://www.boludle.com')}
+            onClick={() => window.open('https://boludle.sotlucas.dev')}
           >
-            Boludle.com
+            Boludle
           </span>
           . Contactanos en{' '}
           <span
@@ -82,7 +82,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
           >
             Twitter
           </span>{' '}
-          o <span className="underline font-bold">mili@boludle.com</span>.
+          o <span className="underline font-bold">mili@sotlucas.dev</span>.
         </div>
       </div>
     </BaseModal>

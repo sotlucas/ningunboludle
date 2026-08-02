@@ -57,6 +57,7 @@ export default function BoluxionesApp() {
     title: conexionesMeta.tabTitle,
     description: conexionesMeta.tabDescription,
     icon: conexionesMeta.icon,
+    url: `https://boludle.sotlucas.dev${conexionesMeta.path}`,
   })
 
   const groupings = useGroupings(getDateArgentina())
