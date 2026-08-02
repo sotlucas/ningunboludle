@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react'
+import { isBoludleCompletedToday } from '../lib/playedToday'
+import { isBoluxionesCompletedToday } from '../games/boluxiones/playedToday'
 
 export type GameMeta = {
   slug: string
@@ -8,6 +10,7 @@ export type GameMeta = {
   cardDescription: string
   tabDescription: string
   icon: string
+  isCompletedToday: () => boolean
 }
 
 export const GAMES: GameMeta[] = [
@@ -21,6 +24,7 @@ export const GAMES: GameMeta[] = [
     tabDescription:
       'El Wordle argentino: adiviná la palabra del día en 6 intentos.',
     icon: '/boludle-icon.svg',
+    isCompletedToday: isBoludleCompletedToday,
   },
   {
     slug: 'conexiones',
@@ -32,5 +36,6 @@ export const GAMES: GameMeta[] = [
     tabDescription:
       'Armá cuatro grupos de cuatro palabras que tengan algo en común.',
     icon: '/conexiones-icon.svg',
+    isCompletedToday: isBoluxionesCompletedToday,
   },
 ]

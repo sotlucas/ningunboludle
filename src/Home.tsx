@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Sun, Moon } from 'lucide-react'
+import { Sun, Moon, Check } from 'lucide-react'
 import { useTheme } from './hooks/useTheme'
 import { GAMES, type GameMeta } from './constants/games'
 import ImgMate from './assets/mate.png'
@@ -9,11 +9,22 @@ type GameCardProps = {
 }
 
 function GameCard({ game }: GameCardProps) {
+  const playedToday = game.isCompletedToday()
+
   return (
     <Link
       to={game.path}
-      className="group flex flex-col justify-between text-center rounded-2xl border border-border bg-surface-raised p-6 shadow-sm transition hover:border-accent hover:shadow-[0_8px_28px_rgba(13,20,32,0.15)]"
+      className={`group relative flex flex-col justify-between text-center rounded-2xl border p-6 shadow-sm transition hover:shadow-[0_8px_28px_rgba(13,20,32,0.15)] ${
+        playedToday
+          ? 'border-emerald-600/40 bg-emerald-600/10 hover:border-emerald-600'
+          : 'border-border bg-surface-raised hover:border-accent'
+      }`}
     >
+      {playedToday && (
+        <span className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 text-white">
+          <Check className="h-4 w-4" strokeWidth={3} />
+        </span>
+      )}
       <img className="mx-auto h-25 w-25 select-none" src={game.icon} alt="" />
       <h2 className="mt-3 font-display text-2xl font-bold tracking-tight text-ink">
         {game.title}
