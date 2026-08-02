@@ -6,6 +6,7 @@ import { emptyGrouping, useGroupings } from './words'
 import { InfoModal } from './modals/InfoModal'
 import { EndScreenModal } from './modals/EndScreenModal'
 import { useGameState } from './useGameState'
+import { loadGameStateFromLocalStorage } from './localStorage'
 import { getPuzzleNumber } from './share'
 import { Navbar } from './components/Navbar'
 import { Tile } from './Tile'
@@ -87,7 +88,7 @@ export default function BoluxionesApp() {
   const { ref: containerRef, width: containerWidth } = useContainer()
   const [tileHeight, setTileHeight] = useState<number>()
 
-  const [isInfoOpen, setIsInfoOpen] = useState(true)
+  const [isInfoOpen, setIsInfoOpen] = useState(() => !loadGameStateFromLocalStorage())
   const [isStatsOpen, setIsStatsOpen] = useState(false)
 
   useEffect(() => {
